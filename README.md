@@ -1,7 +1,7 @@
 # Time Grinder
 
-Mobile-first personal time tracking. The initial scaffold contains Django / Django
-Ninja, PostgreSQL, and React / TypeScript / Vite. Time-tracking features are deferred.
+Mobile-first personal time tracking built with Django / Django Ninja, PostgreSQL,
+and React / TypeScript / Vite.
 
 ## Prerequisites
 
@@ -138,14 +138,18 @@ export UV_PROJECT_ENVIRONMENT="$(pyenv prefix)"
 cd backend
 uv run ruff check .
 uv run ruff format --check .
-uv run pytest
+uv run pytest --create-db
 uv run python manage.py check
 uv run python manage.py makemigrations --check --dry-run
 uv run python manage.py migrate --check
 ```
 
-Tests use a separate PostgreSQL test database; the Compose role can create it.
-Tests cover health JSON, Admin availability and custom User persistence.
+Tests use a single pytest-managed PostgreSQL test database; `--create-db` rebuilds
+it so migrations are verified from a clean state. Do not create additional
+temporary databases for migration checks. The Compose role can create the test
+database.
+Tests cover the scaffold, the custom User, core domain relationships, Action time
+states, and database constraints.
 Generate future migrations with `uv run python manage.py makemigrations`, inspect
 them, then apply with `uv run python manage.py migrate`.
 
@@ -169,11 +173,12 @@ uv run --project backend pre-commit run --all-files
 ## Structure and scope
 
 - `backend/config/`: Django settings, routing, ASGI and WSGI entry points.
-- `backend/grinder/`: custom User, Admin, health API, migrations and tests.
+- `backend/account/`: custom User model, Admin registration, migrations and tests.
+- `backend/grinder/`: core domain models, Admin, health API, migrations and tests.
 - `frontend/src/pages/`: landing page; `components/`, `api/`, `domain/`, and
   `platform/` reserve space for future implementation.
 - `docs/product.md`, `docs/architecture.md`, `docs/ux/main-screen.md`: source of
   truth for product, architecture and UX decisions.
 
-Areas, Projects, Actions, timers, reports, authentication UI and mobile-platform
-integrations are deferred to later issues.
+Timer orchestration, reports, authentication UI and mobile-platform integrations
+are deferred to later issues.

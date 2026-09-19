@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "account.apps.AccountConfig",
     "grinder.apps.GrinderConfig",
 ]
 MIDDLEWARE = [
@@ -54,7 +55,7 @@ DATABASES = {
         "PORT": os.environ.get("POSTGRES_PORT", "55432"),
     },
 }
-AUTH_USER_MODEL = "grinder.User"
+AUTH_USER_MODEL = "account.User"
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},

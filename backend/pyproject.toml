@@ -23,7 +23,7 @@ python-downloads = "never"
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings"
-testpaths = ["grinder/tests"]
+testpaths = ["account/tests", "grinder/tests"]
 
 [tool.ruff]
 line-length = 120
