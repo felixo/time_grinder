@@ -109,6 +109,18 @@ missing. Open <http://127.0.0.1:5173>. Vite proxies `/api` to Django on port 800
 Node selection affects this shell only; npm packages are installed locally.
 `package-lock.json` is tracked.
 
+After installing both backend and frontend dependencies, install the Git hooks
+from the repository root:
+
+```bash
+export UV_PROJECT_ENVIRONMENT="$(pyenv prefix)"
+uv run --project backend pre-commit install
+```
+
+The hooks run Ruff checks and formatting for Python files and ESLint for frontend
+files before each commit. The tracked VS Code settings use the repository's pyenv
+environment and apply available ESLint fixes on explicit save actions.
+
 Stop Django and Vite with Ctrl-C. Stop the database from the root:
 
 ```bash
@@ -124,6 +136,8 @@ With PostgreSQL running and `.env` exported, from the root:
 ```bash
 export UV_PROJECT_ENVIRONMENT="$(pyenv prefix)"
 cd backend
+uv run ruff check .
+uv run ruff format --check .
 uv run pytest
 uv run python manage.py check
 uv run python manage.py makemigrations --check --dry-run
@@ -138,12 +152,19 @@ them, then apply with `uv run python manage.py migrate`.
 With fnm-selected Node, from `frontend/`:
 
 ```bash
+npm run lint
 npm test
 npm run build
 ```
 
 The frontend test renders the landing page. The build checks TypeScript and
-creates production assets. No separate linter or formatter is configured.
+creates production assets. Run `npm run lint:fix` to apply ESLint's automatic
+fixes. Run all configured hooks from the repository root with:
+
+```bash
+export UV_PROJECT_ENVIRONMENT="$(pyenv prefix)"
+uv run --project backend pre-commit run --all-files
+```
 
 ## Structure and scope
 

@@ -151,6 +151,22 @@ cd backend
 uv run pytest
 ```
 
+Run backend lint and formatting checks:
+
+```bash
+cd backend
+uv run ruff check .
+uv run ruff format --check .
+```
+
+Apply backend lint and formatting fixes:
+
+```bash
+cd backend
+uv run ruff check . --fix
+uv run ruff format .
+```
+
 ### Frontend setup
 
 Install dependencies:
@@ -174,6 +190,14 @@ cd frontend
 npm test
 ```
 
+Run frontend lint checks or apply automatic fixes:
+
+```bash
+cd frontend
+npm run lint
+npm run lint:fix
+```
+
 If the actual generated `package.json` uses a different test command, update both this file and `README.md` to match the real project.
 
 Additional scaffold checks:
@@ -186,7 +210,24 @@ uv run python manage.py migrate --check
 ```
 
 From `frontend/`, run `npm run build` to check TypeScript and build production assets.
-No separate linter or formatter is currently configured.
+
+After backend and frontend dependencies are installed, install the Git hooks
+from the repository root:
+
+```bash
+export UV_PROJECT_ENVIRONMENT="$(pyenv prefix)"
+uv run --project backend pre-commit install
+```
+
+Run every configured hook manually from the repository root with:
+
+```bash
+export UV_PROJECT_ENVIRONMENT="$(pyenv prefix)"
+uv run --project backend pre-commit run --all-files
+```
+
+The hooks run Ruff checks and formatting for Python files and ESLint for frontend
+files. The ESLint hook requires `frontend/node_modules` to be installed.
 
 ## Local development expectations
 
