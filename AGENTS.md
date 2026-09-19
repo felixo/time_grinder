@@ -148,8 +148,13 @@ Run backend tests:
 
 ```bash
 cd backend
-uv run pytest
+uv run pytest --create-db
 ```
+
+Use the single local development database configured in `.env` and the single
+pytest-managed test database. Verify clean migration application with
+`pytest --create-db`; do not create additional temporary databases for migration
+checks.
 
 Run backend lint and formatting checks:
 
@@ -472,7 +477,7 @@ Do not rely on globally installed Python or Node packages.
 
 For meaningful backend changes:
 - add or update tests;
-- run relevant `pytest` tests.
+- run relevant tests with `pytest --create-db`.
 
 Important backend behavior includes:
 - only one running timer per user;
